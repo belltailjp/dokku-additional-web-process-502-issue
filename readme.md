@@ -277,6 +277,24 @@ I can get the `web2` work as expected.
 It does not break the behavior of primary process (`web`).
 
 
+## Note: 1 process on port 5555
+
+In the above case, I had two processes inside an app with the following proxy settings.
+- `web` http:80:5000
+- `web2` http:5555:5555
+
+When I have only one web process like follows, it works as expected.
+- `web` http:5555:5555
+
+I confirmed it by the following procedure.
+
+- Disable `web2` process by ps:scale
+- Modify Procfile to only this 1 line: `web: gunicorn app1:app --workers=1 -b 0.0.0.0:5555`
+- Remove http:80:5000 port mapping
+- Deploy
+- Access to `hhtp://myapp.vagrant:5555` and see response from the primary web process.
+
+
 # App info
 
 Here is my app info
